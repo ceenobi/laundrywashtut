@@ -5,6 +5,10 @@ import User from "../model/user.model.js";
 import responseHandler from "../utils/responseHandler.js";
 import { sendToken, signToken } from "../utils/token.js";
 import mailService from "./mail.controller.js";
+import {
+  uploadToCloudinary,
+  deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 
 export const registerUser = async (req, res, next) => {
   //req.body handles form collection passed from the client
@@ -318,6 +322,41 @@ export const refreshToken = async (req, res, next) => {
       accessToken,
       "accesstoken refreshed",
       200
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const uploadAvatar = async (req, res, next) => {
+  const { avatar } = req.body;
+  const userId = req.user.id;
+  try {
+    if (!avatar) {
+      return responseHandler.errorResponse("No file received", 400);
+    }
+    //check if user has an avatar already
+    const user = await User.findById(userId);
+    const currentAvatar = user.avatar;
+    const currentAvatarId = user.avatarId;
+    if (currentAvatar) {
+      //if avatar exisits, then  we delete so we can replace it
+      await deleteFromCloudinary(currentAvatarId);
+    }
+    //replace with new image
+    const { url, public_id } = await uploadToCloudinary(avatar, {
+      folder: "laundrywash/avatars",
+      width: 200,
+      height: 200,
+      crop: "fit",
+    });
+    user.avatar = url || user.avatar;
+    user.avatarId = public_id || user.avatarId;
+    await user.save();
+    return responseHandler.successResponse(
+      res,
+      user,
+      "Avatar upload successfull"
     );
   } catch (error) {
     next(error);

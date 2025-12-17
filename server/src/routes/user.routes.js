@@ -10,6 +10,7 @@ import {
   verifyAccount,
   updateUserDetails,
   refreshToken,
+  uploadAvatar,
 } from "../controller/user.controller.js";
 import { validateFormData } from "../middleware/validateFormData.js";
 import {
@@ -75,5 +76,7 @@ router.patch(
 );
 
 router.post("/refresh-token", refreshToken);
+
+router.patch("/upload-avatar", rateLimiter(5), authenticate, uploadAvatar);
 
 export default router;

@@ -1,7 +1,7 @@
 import { AuthContext } from "@/hooks/useAuth";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { getAuthUser, logoutUser, refreshAccessToken } from "@/api/auth";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import LazySpinner from "@/components/LazySpinner";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
@@ -60,7 +60,7 @@ export default function AuthProvider({ children }) {
       return;
     }
 
-    // If token is valid & not expiring soon, fetch user
+    //   // If token is valid & not expiring soon, fetch user
     setIsAuthenticating(true);
     async function fetchUser() {
       try {
@@ -69,8 +69,7 @@ export default function AuthProvider({ children }) {
           setUser(res.data.data);
         }
       } catch (error) {
-
-      console.error(error);
+        console.error(error);
         // If error, force refresh token
         await refreshTokenAction();
       } finally {
@@ -79,7 +78,7 @@ export default function AuthProvider({ children }) {
     }
 
     fetchUser();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
 
   //refresh accessToken

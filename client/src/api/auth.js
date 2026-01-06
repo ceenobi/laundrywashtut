@@ -16,7 +16,7 @@ export const getAuthUser = async (accessToken) => {
 };
 
 export const refreshAccessToken = async () => {
-  return await axiosClient.post("/user/refresh-token", null, {
+  return await axiosClient.post("/user/refresh-token", {}, {
     withCredentials: true, //ensure cookies is sent along with request
   });
 };

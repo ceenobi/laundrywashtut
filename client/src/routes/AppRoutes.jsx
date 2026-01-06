@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { PrivateRoute, PublicRoute } from "./ProtectedRoute";
 import { useAuth } from "@/hooks/useAuth";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const RootLayout = lazy(() => import("@/layouts/RootLayout"));
 const AuthLayout = lazy(() => import("@/layouts/AuthLayout"));
@@ -33,6 +34,7 @@ export default function AppRoutes() {
   const routes = [
     {
       path: "/",
+      errorElement: <ErrorBoundary />,
       element: (
         <Suspense fallback={<LazySpinner />}>
           <RootLayout />
@@ -118,6 +120,7 @@ export default function AppRoutes() {
       ],
     },
     {
+      errorElement: <ErrorBoundary />,
       element: (
         <Suspense fallback={<LazySpinner />}>
           <PublicRoute accessToken={accessToken}>
@@ -146,6 +149,7 @@ export default function AppRoutes() {
     },
     {
       path: "auth",
+      errorElement: <ErrorBoundary />,
       element: (
         <Suspense fallback={<LazySpinner />}>
           <PublicRoute accessToken={accessToken}>
@@ -174,6 +178,7 @@ export default function AppRoutes() {
     },
     {
       path: "verify-email/:userId/:verifyTokenLink",
+      errorElement: <ErrorBoundary />,
       element: (
         <Suspense fallback={<LazySpinner />}>
           <PrivateRoute accessToken={accessToken}>
@@ -184,6 +189,7 @@ export default function AppRoutes() {
     },
     {
       path: "verify-email",
+      errorElement: <ErrorBoundary />,
       element: (
         <Suspense fallback={<LazySpinner />}>
           <PrivateRoute accessToken={accessToken}>
@@ -194,6 +200,7 @@ export default function AppRoutes() {
     },
     {
       path: "admin",
+      errorElement: <ErrorBoundary />,
       element: (
         <Suspense fallback={<LazySpinner />}>
           <PrivateRoute accessToken={accessToken}>

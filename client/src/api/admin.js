@@ -32,6 +32,7 @@ export const getAllUsers = async (searchParams, accessToken) => {
     },
   });
 };
+
 export const getAllOrders = async (searchParams, accessToken) => {
   const page = Number(searchParams.get("page")) || 1;
   const limit = Number(searchParams.get("limit")) || 10;

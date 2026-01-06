@@ -29,13 +29,12 @@ const httpServer = createServer(app);
 app.use(
   cors({
     origin: [
-      "http://localhost:4200",
       "http://localhost:3800",
       "https://laundrywashtut-client.vercel.app",
-    ], //permits domains specified to talk to server
+    ],
     credentials: true, // allows cookies to be sent to client
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"], //permitted http methods
-    optionsSuccessStatus: 200, //default status code
+    optionsSuccessStatus: 200,
   })
 );
 app.use(cookieParser()); //initialize cookies in app

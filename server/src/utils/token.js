@@ -28,7 +28,7 @@ export const sendToken = (user) => {
     secure: isProduction, //send cookie over HTTPS only in prod enviroment
     maxAge: 7 * 24 * 60 * 60 * 1000, //cookie is valid 7 days
     path: "/", //cookie is accessible on the specified api endpoint
-    SameSite: isProduction ? "none" : "lax", //is required when the cookie is used on diff domains - server and client runs on different host/port. We want to adjust the cross-site request policy ensuring the secure transfer  of the cookie to a diff domain when in production mode (HTTPS), Setting lax enables the cookie to work in dev mode.
+    sameSite: isProduction ? "none" : "lax",
   };
   return {
     accessToken: token.accessToken,

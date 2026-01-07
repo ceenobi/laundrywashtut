@@ -296,6 +296,7 @@ export const updateUserDetails = async (req, res, next) => {
 export const refreshToken = async (req, res, next) => {
   try {
     const refreshedToken = req.cookies.refreshToken;
+    console.log("ref", refreshToken)
     if (!refreshedToken) {
       return next(responseHandler.errorResponse("Refresh token is required"));
     }

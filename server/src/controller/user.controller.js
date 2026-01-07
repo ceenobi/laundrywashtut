@@ -296,7 +296,6 @@ export const updateUserDetails = async (req, res, next) => {
 export const refreshToken = async (req, res, next) => {
   try {
     const refreshedToken = req.cookies.refreshToken;
-    console.log("ref", refreshToken)
     if (!refreshedToken) {
       return next(responseHandler.errorResponse("Refresh token is required"));
     }
@@ -312,7 +311,7 @@ export const refreshToken = async (req, res, next) => {
     if (!user) {
       return next(responseHandler.notFoundResponse("User not found"));
     }
-    const getNewToken = signToken(user._id, user.role);
+    const getNewToken = sendToken(user);
     if (!getNewToken) {
       throw new Error("Failed to create new token");
     }

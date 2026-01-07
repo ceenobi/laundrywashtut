@@ -20,8 +20,7 @@ export const signToken = (id, role) => {
 
 export const sendToken = (user) => {
   if (!user) return;
-  const token = signToken(user._id, user.role); //_id comes from mongodb
-  //create a cookie to store refreshToken in order to prevent browser access on client
+  const token = signToken(user._id, user.role);
   const isProduction = process.env.NODE_ENV === "production";
   const cookieOptions = {
     httpOnly: true, //cookie is not accessible in javascript

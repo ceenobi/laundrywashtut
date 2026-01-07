@@ -316,8 +316,11 @@ export const refreshToken = async (req, res, next) => {
     if (!getNewToken) {
       throw new Error("Failed to create new token");
     }
-    //destructure accesstoken and cookieOptions from new token
-    const { accessToken } = getNewToken;
+    //destructure accesstoken, refreshToken and cookieOptions from new token
+    const { accessToken, refreshToken: newRefreshToken, cookieOptions } = getNewToken;
+    // Set the new refreshToken cookie - this is critical for mobile devices
+    res.cookie("refreshToken", newRefreshToken, cookieOptions);
+    console.log("acc", accessToken)
     return responseHandler.successResponse(
       res,
       accessToken,

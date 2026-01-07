@@ -23,10 +23,10 @@ export const sendToken = (user) => {
   const token = signToken(user._id, user.role);
   const isProduction = process.env.NODE_ENV === "production";
   const cookieOptions = {
-    httpOnly: true, //cookie is not accessible in javascript
-    secure: isProduction, //send cookie over HTTPS only in prod enviroment
-    maxAge: 7 * 24 * 60 * 60 * 1000, //cookie is valid 7 days
-    path: "/", //cookie is accessible on the specified api endpoint
+    httpOnly: true,
+    secure: isProduction,
+    maxAge: 7 * 24 * 60 * 60 * 1000, 
+    path: "/",
     sameSite: isProduction ? "none" : "lax",
   };
   return {

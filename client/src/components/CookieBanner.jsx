@@ -1,7 +1,7 @@
 // Cookie Banner Component
 export default function CookieBanner({ onDismiss }) {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-yellow-500 text-white shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-yellow-500 text-white shadow-lg">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
         <div className="flex-1">
           <p className="font-semibold mb-1">Cookies are disabled</p>

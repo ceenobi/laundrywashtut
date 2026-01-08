@@ -5,22 +5,27 @@ import { useCallback, useState, useEffect } from "react";
 import LazySpinner from "@/components/LazySpinner";
 import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
+import { safeGetItem, safeSetItem, safeRemoveItem } from "@/utils/storage";
 
 export default function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(() => {
-    return localStorage.getItem("laundryBookingToken") || null;
+    return safeGetItem("laundryBookingToken") || null;
   });
   const [user, setUser] = useState(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
   const [bookingForm, setBookingForm] = useState(() => {
-    const persistedState = localStorage.getItem("laundryBookingForm");
+    const persistedState = safeGetItem("laundryBookingForm");
     return persistedState ? JSON.parse(persistedState) : null;
   });
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    localStorage.setItem("laundryBookingToken", accessToken);
+    if (accessToken) {
+      safeSetItem("laundryBookingToken", accessToken);
+    } else {
+      safeRemoveItem("laundryBookingToken");
+    }
   }, [accessToken]);
 
   const refreshTokenAction = useCallback(async () => {

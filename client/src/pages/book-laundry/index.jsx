@@ -14,6 +14,7 @@ import FormField from "@/components/FormField";
 import { toast } from "react-toastify";
 import { useNavigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "@/hooks/useAuth";
+import { safeRemoveItem, safeSetItem } from "@/utils/storage";
 
 export default function BookLaundry() {
   const { bookingForm, setBookingForm } = useAuth();
@@ -64,7 +65,7 @@ export default function BookLaundry() {
 
   const cancelForm = () => {
     setBookingForm(null);
-    localStorage.removeItem("laundryBookingForm");
+    safeRemoveItem("laundryBookingForm");
     reset();
   };
 
@@ -102,7 +103,7 @@ export default function BookLaundry() {
       toast.warning("Select at least one item quantity to proceed");
       return;
     }
-    localStorage.setItem("laundryBookingForm", JSON.stringify(data));
+    safeSetItem("laundryBookingForm", JSON.stringify(data));
     setBookingForm(data);
     navigate("/book-laundry/booking-summary");
   };

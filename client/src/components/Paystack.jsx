@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { createPayment } from "@/api/payment";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useRef, useCallback } from "react";
+import { safeRemoveItem } from "@/utils/storage";
 
 export default function Paystack({
   bookingId,
@@ -22,7 +23,7 @@ export default function Paystack({
     onSuccess: (res) => {
       toast.success(res.data.message || "Payment successful");
       queryClient.invalidateQueries({ queryKey: ["userBookings"] });
-      localStorage.removeItem("laundryBookingForm");
+      safeRemoveItem("laundryBookingForm");
       setBookingForm(null);
       setIsModalOpen(true);
       if (onClose) onClose();

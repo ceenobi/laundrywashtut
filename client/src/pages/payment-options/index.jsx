@@ -8,6 +8,7 @@ import { createPayment } from "@/api/payment";
 import { toast } from "react-toastify";
 import Paystack from "@/components/Paystack";
 import Modal from "@/components/Modal";
+import { safeRemoveItem } from "@/utils/storage";
 
 export default function PaymentOptions() {
   const [selectPayment, setSelectPayment] = useState("Pay on Delivery");
@@ -25,7 +26,7 @@ export default function PaymentOptions() {
     onSuccess: (res) => {
       toast.success(res.data.message || "Payment successful");
       queryClient.invalidateQueries({ queryKey: ["userBookings"] });
-      localStorage.removeItem("laundryBookingForm");
+      safeRemoveItem("laundryBookingForm");
       setBookingForm(null);
       setIsModalOpen(true);
     },

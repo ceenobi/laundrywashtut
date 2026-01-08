@@ -10,6 +10,7 @@ const queryClient = new QueryClient();
 
 function App() {
   const [showCookieBanner, setShowCookieBanner] = useState(false);
+
   useEffect(() => {
     const checkCookies = () => {
       const blocked = detectCookiesBlocked();
@@ -28,7 +29,7 @@ function App() {
       {showCookieBanner && (
         <CookieBanner onDismiss={() => setShowCookieBanner(false)} />
       )}
-      {showCookieBanner && <div className="h-20" />}
+      {showCookieBanner}
       <ToastContainer position="bottom-center" />
       <QueryClientProvider client={queryClient}>
         <AuthProvider>

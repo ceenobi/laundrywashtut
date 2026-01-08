@@ -25,7 +25,6 @@ export const authenticate = async (req, res, next) => {
         token,
         process.env.JWT_ACCESS_TOKEN_SECRET_KEY
       );
-      //assign req.user to verifyToken
       req.user = verifyToken;
       return next();
     } catch (error) {
@@ -51,6 +50,6 @@ export const authorizedRoles = (...roles) => {
         )
       );
     }
-    next() //carry on with the task
+    next(); //carry on with the task
   };
 };

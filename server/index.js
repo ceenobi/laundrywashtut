@@ -30,6 +30,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3800",
+      "http://localhost:3500",
       "https://laundrywashtut-client.vercel.app",
     ],
     credentials: true, // allows cookies to be sent to client

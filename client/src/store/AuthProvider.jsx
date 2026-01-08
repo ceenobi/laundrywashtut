@@ -7,14 +7,21 @@ import { toast } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
 
 export default function AuthProvider({ children }) {
-  const [accessToken, setAccessToken] = useState(null);
+  const [accessToken, setAccessToken] = useState(() => {
+    return localStorage.getItem("laundryBookingToken") || null;
+  });
   const [user, setUser] = useState(null);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+
   const [bookingForm, setBookingForm] = useState(() => {
     const persistedState = localStorage.getItem("laundryBookingForm");
     return persistedState ? JSON.parse(persistedState) : null;
   });
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    localStorage.setItem("laundryBookingToken", accessToken);
+  }, [accessToken]);
 
   const refreshTokenAction = useCallback(async () => {
     try {
@@ -36,12 +43,6 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     let needsRefresh = false;
-
-    if (!accessToken) {
-      refreshTokenAction();
-      return;
-    }
-
     try {
       const decodedToken = jwtDecode(accessToken);
       const expirationTime = decodedToken?.exp ?? 0;
@@ -60,7 +61,7 @@ export default function AuthProvider({ children }) {
       return;
     }
 
-    //   // If token is valid & not expiring soon, fetch user
+    // If token is valid & not expiring soon, fetch user
     setIsAuthenticating(true);
     async function fetchUser() {
       try {
@@ -70,7 +71,6 @@ export default function AuthProvider({ children }) {
         }
       } catch (error) {
         console.error(error);
-        // If error, force refresh token
         await refreshTokenAction();
       } finally {
         setIsAuthenticating(false);
@@ -80,63 +80,6 @@ export default function AuthProvider({ children }) {
     fetchUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accessToken]);
-
-  //refresh accessToken
-  // const refresh = useQuery({
-  //   queryKey: ["refresh_token"],
-  //   queryFn: async () => {
-  //     const res = await refreshAccessToken();
-  //     if (res.status === 200) {
-  //       setAccessToken(res.data.data);
-  //     } else {
-  //       setAccessToken(null);
-  //     }
-  //     return res;
-  //   },
-  //   onError: async (error) => {
-  //     console.error("Error refreshing accessToken", error);
-  //     setAccessToken(null);
-  //   },
-  //   enabled: !accessToken,
-  //   retry: false,
-  // });
-
-  //fetch auth user with automatic token refresh on failure
-  // const { isPending } = useQuery({
-  //   queryKey: ["auth_user", accessToken],
-  //   queryFn: async () => {
-  //     try {
-  //       const res = await getAuthUser(accessToken);
-  //       if (res.status === 200) {
-  //         setUser(res.data.data);
-  //       }
-  //       return res;
-  //     } catch (error) {
-  //       // When getAuthUser throws, call refreshAccessToken to update accessToken
-  //       try {
-  //         const refreshRes = await refreshTokenAction();
-  //         if (refreshRes.status === 200) {
-  //           setAccessToken(refreshRes.data.data);
-  //           queryClient.invalidateQueries({ queryKey: ["auth_user"] });
-  //         } else {
-  //           setAccessToken(null);
-  //           setUser(null);
-  //         }
-  //       } catch {
-  //         setAccessToken(null);
-  //         setUser(null);
-  //       }
-  //       throw error;
-  //     }
-  //   },
-  //   enabled: !!accessToken,
-  //   retry: false,
-  //   onError: async (error) => {
-  //     console.error(error);
-  //     setAccessToken(null);
-  //     setUser(null);
-  //   },
-  // });
 
   const mutation = useMutation({
     mutationFn: logoutUser,

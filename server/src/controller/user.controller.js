@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../model/user.model.js";
 import responseHandler from "../utils/responseHandler.js";
-import { sendToken, signToken } from "../utils/token.js";
+import { sendToken } from "../utils/token.js";
 import mailService from "./mail.controller.js";
 import {
   uploadToCloudinary,
@@ -46,7 +46,6 @@ export const registerUser = async (req, res, next) => {
     process.nextTick(() => {
       mailService.sendRegistrationMail(user, verifcationLink);
     });
-    //send the cookie
     res.cookie("refreshToken", refreshToken, cookieOptions);
     //return json resposne
     return responseHandler.successResponse(
@@ -296,7 +295,6 @@ export const updateUserDetails = async (req, res, next) => {
 export const refreshToken = async (req, res, next) => {
   try {
     const refreshedToken = req.cookies.refreshToken;
-    console.log("tt", refreshedToken)
     if (!refreshedToken) {
       return next(responseHandler.errorResponse("Refresh token is required"));
     }
@@ -317,10 +315,13 @@ export const refreshToken = async (req, res, next) => {
       throw new Error("Failed to create new token");
     }
     //destructure accesstoken, refreshToken and cookieOptions from new token
-    const { accessToken, refreshToken: newRefreshToken, cookieOptions } = getNewToken;
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      cookieOptions,
+    } = getNewToken;
     // Set the new refreshToken cookie - this is critical for mobile devices
     res.cookie("refreshToken", newRefreshToken, cookieOptions);
-    console.log("acc", accessToken)
     return responseHandler.successResponse(
       res,
       accessToken,

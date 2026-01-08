@@ -20,7 +20,7 @@ export const refreshAccessToken = async () => {
     "/user/refresh-token",
     {},
     {
-      withCredentials: true, //ensure cookies is sent along with request
+      withCredentials: true,
     }
   );
 };
